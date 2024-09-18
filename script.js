@@ -23,8 +23,9 @@ function complete() {
 const fetchQuotes = async (url) => {
   loading();
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: { 'X-Api-Key': '/Wk5aTr/b1fqJWCmv11mcg==UObrUHGXSKCy64o0' } });
     quotes = await response.json();
+    console.log(quotes[0]);
     displayQuotes();
   } catch (e) {
     console.log(e);
@@ -41,16 +42,19 @@ const randomQuotesIdentifier = (quotes) => {
 const displayQuotes = async () => {
   loading();
   //Display quote to the DOM
-  const quoteObj = quotes[`${randomQuotesIdentifier(quotes)}`];
+  //const quoteObj = quotes[`${randomQuotesIdentifier(quotes)}`];
+  // Only a single quote is returned.
+  const quoteObj = quotes[0];
   //console.log(quoteObj);
-  if (quoteObj.text.length > 120) {
-    quoteTxt.classList.add('long-quote');
-  } else {
-    quoteTxt.classList.remove('long-quote');
-  }
+  //if (quoteObj.text.length > 120) {
+  quoteTxt.classList.add('long-quote');
+  //} else {
+  //  quoteTxt.classList.remove('long-quote');
+  //}
 
   //   set quote, hide loader
-  quoteTxt.textContent = quoteObj.text;
+  //quoteTxt.textContent = quoteObj.text;
+  quoteTxt.textContent = quoteObj.quote;
   authorTxt.textContent = quoteObj.author;
   complete();
   //console.log(quotes[randomQuotesIdentifier(quotes)].text);
@@ -62,7 +66,9 @@ function tweetQuote() {
 }
 
 //Onload
-fetchQuotes('https://type.fit/api/quotes');
+//new api link for learning purpose.
+fetchQuotes('https://api.api-ninjas.com/v1/quotes');
 
-quoteBtn.addEventListener('click', displayQuotes);
+//quoteBtn.addEventListener('click', displayQuotes);
+quoteBtn.addEventListener('click', fetchQuotes.bind(null, 'https://api.api-ninjas.com/v1/quotes'));
 twitterBtn.addEventListener('click', tweetQuote);
